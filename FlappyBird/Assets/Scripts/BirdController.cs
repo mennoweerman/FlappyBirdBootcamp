@@ -26,7 +26,6 @@ public class BirdController : MonoBehaviour
     {
         Vector3 movement = new Vector3(movementX, 0.0f, 0.0f);
         rb.AddForce(movement * speed);
-        transform.position += transform.forward * forwardSpeed * Time.deltaTime;
     }
 
     private void OnCollisionEnter(Collision collision)
