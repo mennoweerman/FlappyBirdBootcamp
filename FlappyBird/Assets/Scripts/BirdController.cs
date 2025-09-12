@@ -15,6 +15,9 @@ public class BirdController : MonoBehaviour
 
     // UI object to display winning text.
     public GameObject winTextObject;
+    
+    // Reference to ObstacleManager
+    public ObstacleManager obstacleManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -36,17 +39,31 @@ public class BirdController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("ObstacleClearCollider"))
+        {
+            if (obstacleManager != null)
+            {
+                // Vind het parent obstacle van de collider
+                GameObject obstacleToRemove = other.gameObject.transform.parent?.gameObject ?? other.gameObject;
+                obstacleManager.RemoveObstacleAndSpawnNew(obstacleToRemove);
+            }
+            else
+            {
+                Debug.LogWarning("ObstacleManager reference is missing in BirdController!");
+            }
+        }
+    }
     void OnMove(InputValue movementValue)
     {
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
-        Debug.Log("Move action triggered: " + movementVector);
     }
 
     void OnJump()
     {
-        Debug.Log("Jump action triggered");
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     
