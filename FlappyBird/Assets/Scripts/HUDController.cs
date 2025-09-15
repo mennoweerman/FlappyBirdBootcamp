@@ -8,12 +8,6 @@ public class HUDController : MonoBehaviour
     private Label highScoreLabel;
     private Button restartButton;
 
-    [Header("Sound Effects")]
-    private AudioSource audioSource;
-    public AudioClip MenuClickSound;
-    public float soundFXminPitch = 0.6f;
-    public float soundFXmaxPitch = 1.25f;
-
     [Header("Score Tracking")]
     private int score = 0;
     private int highScore;
@@ -37,11 +31,6 @@ public class HUDController : MonoBehaviour
         // Verberg bij start
         gameOverLabel.style.display = DisplayStyle.None;
         restartButton.style.display = DisplayStyle.None;
-    }
-
-    void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
     }
 
     public void UpdateScore(int newScore)
@@ -73,8 +62,6 @@ public class HUDController : MonoBehaviour
 
     private void RestartGame()
     {
-        audioSource.pitch = Random.Range(soundFXminPitch, soundFXmaxPitch);
-        audioSource.PlayOneShot(MenuClickSound);
         Time.timeScale = 1f;
         // Resume time
         UnityEngine.SceneManagement.SceneManager.LoadScene(
