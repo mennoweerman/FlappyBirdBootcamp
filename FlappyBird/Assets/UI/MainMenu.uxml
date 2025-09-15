@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=8b4e9b2d9bfd8e447bfaebd77ec5fd72&amp;type=3#MainMenuStyle" />
+    <ui:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/UI/MainMenu.jpg?fileID=21300000&amp;guid=e46a3babf13861243b466a5ab4e4d141&amp;type=3#MainMenu&quot;);">
+        <ui:Label text="Fishy Business&#10;" name="GameTitle" class="header" style="font-size: 69px; color: rgb(255, 255, 255); -unity-font-definition: url(&quot;project://database/Assets/Fonts/TradeWinds-Regular.ttf?fileID=12800000&amp;guid=5c0169bebec678749a3dff75d3cdef83&amp;type=3#TradeWinds-Regular&quot;); align-items: center; justify-content: center; align-self: center; align-content: center; top: 10px; text-shadow: 0 3px 0 rgba(0, 0, 0, 0); -unity-text-align: middle-center;" />
+        <ui:Button text="Start Game" name="StartGameButton" class="button" style="width: 300px; margin-top: 200px;" />
+        <ui:Button text="How To Play&#10;" name="HowToPlayButton" class="button" style="width: 330px; margin-top: 20px;" />
+        <ui:Label text="Hier staat vage tekst" name="HowToPlayText" class="header" style="font-size: 48px; color: rgb(255, 255, 255); -unity-font-definition: url(&quot;project://database/Assets/Fonts/TradeWinds-Regular.ttf?fileID=12800000&amp;guid=5c0169bebec678749a3dff75d3cdef83&amp;type=3#TradeWinds-Regular&quot;); align-items: center; justify-content: center; align-self: center; align-content: center; top: 330px; text-shadow: 0 3px 0 rgba(0, 0, 0, 0); -unity-text-align: middle-center; position: absolute;" />
+        <ui:Button text="Return&#10;" name="ReturnButton" class="button" style="width: 330px; margin-top: 20px;" />
+    </ui:VisualElement>
+</ui:UXML>
