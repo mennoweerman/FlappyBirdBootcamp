@@ -10,11 +10,26 @@ public class ObstacleManager : MonoBehaviour
     public int maxObstacles = 4;
     public float obstacleSpeed;
     public Vector3 spawnPosition;
-    public float spaceBetweenObstacles = 10f; 
+    public float spaceBetweenObstacles = 10f;
+    
+    [Header("Difficulty Settings")]
+    public float baseObstacleSpeed = 5f; // Start snelheid
+    public float maxObstacleSpeed = 10f; // Maximum snelheid (nog verder verlaagd)
+    public float difficultyIncreaseRate = 0.02f; // Snelheidstoename per seconde (zeer langzaam)
+    public float spaceDecreaseRate = 0.01f; // Hoe snel ruimte afneemt per seconde (extreem langzaam)
+    public float minSpaceMultiplier = 0.8f; // Minimum ruimte als percentage van basis (0.8 = 80% van origineel)
+    
+    private float gameTime = 0f; // Houd bij hoe lang het spel al bezig is
+    private float currentSpaceBetweenObstacles; // Dynamische ruimte die verandert over tijd  
 
     void Start()
     {
         activeObstacles = new List<GameObject>();
+        
+        // Initialiseer difficulty instellingen
+        obstacleSpeed = baseObstacleSpeed;
+        currentSpaceBetweenObstacles = spaceBetweenObstacles; // Begin met basis ruimte
+        gameTime = 0f;
         
         SpawnInitialObstacles();
     }
@@ -22,7 +37,26 @@ public class ObstacleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateDifficulty();
         MoveObstaclesTowardsPlayer();
+    }
+    
+    void UpdateDifficulty()
+    {
+        // Verhoog alleen difficulty wanneer spel loopt (timeScale > 0)
+        if (Time.timeScale > 0)
+        {
+            gameTime += Time.deltaTime;
+            
+            // Verhoog obstacle snelheid over tijd
+            float targetSpeed = baseObstacleSpeed + (gameTime * difficultyIncreaseRate);
+            obstacleSpeed = Mathf.Min(targetSpeed, maxObstacleSpeed);
+            
+            // Verminder ruimte tussen obstacles over tijd
+            float spaceReduction = gameTime * spaceDecreaseRate;
+            float minSpace = spaceBetweenObstacles * minSpaceMultiplier;
+            currentSpaceBetweenObstacles = Mathf.Max(spaceBetweenObstacles - spaceReduction, minSpace);
+        }
     }
     
     void SpawnInitialObstacles()
@@ -34,7 +68,7 @@ public class ObstacleManager : MonoBehaviour
             GameObject obstacleToSpawn = GetUnusedObstacle();
             
             // Bereken spawn positie (startpositie + afstand * index)
-            Vector3 spawnPos = spawnPosition + new Vector3(0, 0, spaceBetweenObstacles * i);
+            Vector3 spawnPos = spawnPosition + new Vector3(0, 0, currentSpaceBetweenObstacles * i);
             
             GameObject spawnedObstacle = Instantiate(obstacleToSpawn, spawnPos, Quaternion.identity);
             activeObstacles.Add(spawnedObstacle);
@@ -72,7 +106,7 @@ public class ObstacleManager : MonoBehaviour
             return null;
         }
         
-        // Return een willekeurig obstacle uit de beschikbare obstacles
+        // Geef een willekeurig obstacle terug uit de beschikbare obstacles
         int randomIndex = Random.Range(0, availableObstacles.Count);
         return availableObstacles[randomIndex];
     }
@@ -90,8 +124,22 @@ public class ObstacleManager : MonoBehaviour
             obstacleToSpawnObj = obstacles[randomIndex];
         }
         
-        // Bereken spawn positie (startpositie + afstand * maxObstacles)
-        Vector3 newSpawnPosition = spawnPosition + new Vector3(0, 0, spaceBetweenObstacles * maxObstacles);
+        // Vind de laatste (verste) obstacle positie
+        Vector3 newSpawnPosition = spawnPosition;
+        if (activeObstacles.Count > 0)
+        {
+            float farthestZ = float.MinValue;
+            foreach (GameObject activeObstacle in activeObstacles)
+            {
+                if (activeObstacle != null && activeObstacle.transform.position.z > farthestZ)
+                {
+                    farthestZ = activeObstacle.transform.position.z;
+                }
+            }
+            
+            // Spawn achter het laatste obstacle + currentSpaceBetweenObstacles
+            newSpawnPosition = new Vector3(spawnPosition.x, spawnPosition.y, farthestZ + currentSpaceBetweenObstacles);
+        }
         
         GameObject spawnedObstacle = Instantiate(obstacleToSpawnObj, newSpawnPosition, Quaternion.identity);
         activeObstacles.Add(spawnedObstacle);
@@ -111,7 +159,7 @@ public class ObstacleManager : MonoBehaviour
         // Zoek het obstacle in de activeObstacles lijst
         GameObject obstacleInList = null;
         
-        // Eerst proberen direct te vinden
+        // Probeer eerst direct te vinden
         if (activeObstacles.Contains(obstacleToRemove))
         {
             obstacleInList = obstacleToRemove;
@@ -156,7 +204,7 @@ public class ObstacleManager : MonoBehaviour
             
             if (obstacle == null)
             {
-                // Verwijder null references uit de lijst
+                // Verwijder null referenties uit de lijst
                 activeObstacles.RemoveAt(i);
                 continue;
             }
@@ -165,8 +213,16 @@ public class ObstacleManager : MonoBehaviour
             float directionZ = (player.transform.position.z - 10f) - obstacle.transform.position.z;
             Vector3 moveDirection = new Vector3(0, 0, Mathf.Sign(directionZ));
             
-            // Beweeg obstacle richting speler alleen op de Z-as met de ingestelde speed
+            // Beweeg obstacle richting speler alleen op de Z-as met de ingestelde snelheid
             obstacle.transform.position += moveDirection * obstacleSpeed * Time.deltaTime;
         }
+    }
+    
+    public void ResetDifficulty()
+    {
+        // Reset moeilijkheidsgraad naar startwaarden
+        gameTime = 0f;
+        obstacleSpeed = baseObstacleSpeed;
+        currentSpaceBetweenObstacles = spaceBetweenObstacles;
     }
 }
