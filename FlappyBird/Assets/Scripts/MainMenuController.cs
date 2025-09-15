@@ -40,6 +40,7 @@ public class MainMenuController : MonoBehaviour
     void Start()
     {
         player.SetActive(false);
+        hudController.gameObject.SetActive(false);
         obstacleManager.gameObject.SetActive(false);
     }
 
