@@ -1,0 +1,84 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+public class HUDController : MonoBehaviour
+{
+    private Label scoreLabel;
+    private Label gameOverLabel;
+    private Label highScoreLabel;
+    private Button restartButton;
+
+    [Header("Sound Effects")]
+    private AudioSource audioSource;
+    public AudioClip MenuClickSound;
+    public float soundFXminPitch = 0.6f;
+    public float soundFXmaxPitch = 1.25f;
+
+    [Header("Score Tracking")]
+    private int score = 0;
+    private int highScore;
+
+    void Awake()
+    {
+        var root = GetComponent<UIDocument>().rootVisualElement;
+
+        scoreLabel = root.Q<Label>("score-label");
+        gameOverLabel = root.Q<Label>("gameover-label");
+        highScoreLabel = root.Q<Label>("highscore-label");
+        restartButton = root.Q<Button>("restart-button");
+
+        // Load saved high score
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
+        highScoreLabel.text = $"High Score: {highScore}";
+
+        // Connect restart button
+        restartButton.clicked += RestartGame;
+
+        // Verberg bij start
+        gameOverLabel.style.display = DisplayStyle.None;
+        restartButton.style.display = DisplayStyle.None;
+    }
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    public void UpdateScore(int newScore)
+    {
+        score = newScore;
+        scoreLabel.text = $"Score: {score}";
+    }
+
+    public void GameOver()
+    {
+        // Show Game Over
+        gameOverLabel.style.display = DisplayStyle.Flex;
+
+        // Check & update high score
+        if (score > highScore)
+        {
+            highScore = score;
+            PlayerPrefs.SetInt("HighScore", highScore);
+            PlayerPrefs.Save();
+        }
+
+        highScoreLabel.text = $"High Score: {highScore}";
+        highScoreLabel.style.display = DisplayStyle.Flex;
+        restartButton.style.display = DisplayStyle.Flex;
+
+        // Pause game
+        Time.timeScale = 0f;
+    }
+
+    private void RestartGame()
+    {
+        audioSource.pitch = Random.Range(soundFXminPitch, soundFXmaxPitch);
+        audioSource.PlayOneShot(MenuClickSound);
+        Time.timeScale = 1f;
+        // Resume time
+        UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
+        );
+    }
+}
