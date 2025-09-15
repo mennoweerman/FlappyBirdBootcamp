@@ -36,35 +36,35 @@ public class MainMenuController : MonoBehaviour
         _returnButton.style.display = DisplayStyle.None;
         _howToPlayLabel.style.display = DisplayStyle.None;
     }
-
-    private void StartGame()
-    {
-        this.gameObject.SetActive(false);
-        hudController.gameObject.SetActive(true);
-        ActivatePlayerWithDelay();
-    }
-
-    private void ShowHowToPlay()
-    {
-
-    }
-
-    private void ReturnToMainMenu()
-    {
-
-    }
-
+    
     void Start()
     {
-        hudController.gameObject.SetActive(false);
         player.SetActive(false);
         obstacleManager.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void StartGame()
     {
+        gameObject.GetComponent<UIDocument>().enabled = false;
+        StartCoroutine(ActivatePlayerWithDelay());
+    }
 
+    private void ShowHowToPlay()
+    {
+        _startButton.style.display = DisplayStyle.None;
+        _howToPlayButton.style.display = DisplayStyle.None;
+
+        _howToPlayLabel.style.display = DisplayStyle.Flex;
+        _returnButton.style.display = DisplayStyle.Flex;
+    }
+
+    private void ReturnToMainMenu()
+    {
+        _startButton.style.display = DisplayStyle.Flex;
+        _howToPlayButton.style.display = DisplayStyle.Flex;
+
+        _howToPlayLabel.style.display = DisplayStyle.None;
+        _returnButton.style.display = DisplayStyle.None;
     }
 
     private IEnumerator ActivatePlayerWithDelay()
@@ -72,5 +72,6 @@ public class MainMenuController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         player.SetActive(true);
         obstacleManager.gameObject.SetActive(true);
+        hudController.gameObject.SetActive(true);
     }
 }
