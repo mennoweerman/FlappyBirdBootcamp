@@ -261,7 +261,7 @@ public class BirdController : MonoBehaviour
     public void LoseGame()
     {
         // Reset time scale in case slow motion was active
-        Time.timeScale = 0f;
+        Time.timeScale = 1f;
         isSlowMotionActive = false;
         
         audioSource.pitch = Random.Range(soundFXminPitch, soundFXmaxPitch);

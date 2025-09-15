@@ -70,7 +70,7 @@ public class ObstacleManager : MonoBehaviour
             // Bereken spawn positie (startpositie + afstand * index)
             Vector3 spawnPos = spawnPosition + new Vector3(0, 0, currentSpaceBetweenObstacles * i);
             
-            GameObject spawnedObstacle = Instantiate(obstacleToSpawn, spawnPos, Quaternion.identity, transform);
+            GameObject spawnedObstacle = Instantiate(obstacleToSpawn, spawnPos, Quaternion.identity);
             activeObstacles.Add(spawnedObstacle);
         }
     }
@@ -141,7 +141,7 @@ public class ObstacleManager : MonoBehaviour
             newSpawnPosition = new Vector3(spawnPosition.x, spawnPosition.y, farthestZ + currentSpaceBetweenObstacles);
         }
         
-        GameObject spawnedObstacle = Instantiate(obstacleToSpawnObj, newSpawnPosition, Quaternion.identity, transform);
+        GameObject spawnedObstacle = Instantiate(obstacleToSpawnObj, newSpawnPosition, Quaternion.identity);
         activeObstacles.Add(spawnedObstacle);
         
         // Verwijder het oudste obstacle als we meer dan maxObstacles hebben
