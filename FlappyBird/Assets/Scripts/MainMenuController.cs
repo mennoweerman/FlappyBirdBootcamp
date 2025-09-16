@@ -12,6 +12,7 @@ public class MainMenuController : MonoBehaviour
     private UIDocument _uiDocument;
     private Button _startButton;
     private Button _howToPlayButton;
+    private Button _quitButton;
     private Button _returnButton;
     private Label _howToPlayLabel;
     private Label _titleLabel;
@@ -24,12 +25,14 @@ public class MainMenuController : MonoBehaviour
 
         _startButton = root.Q<Button>("StartGameButton");
         _howToPlayButton = root.Q<Button>("HowToPlayButton");
+        _quitButton = root.Q<Button>("QuitButton");
         _returnButton = root.Q<Button>("ReturnButton");
         _howToPlayLabel = root.Q<Label>("HowToPlayText");
         _titleLabel = root.Q<Label>("GameTitle");
 
         _startButton.clicked += StartGame;
         _howToPlayButton.clicked += ShowHowToPlay;
+        _quitButton.clicked += Application.Quit;
         _returnButton.clicked += ReturnToMainMenu;
 
         // Verberg bij start
@@ -54,6 +57,7 @@ public class MainMenuController : MonoBehaviour
     {
         _startButton.style.display = DisplayStyle.None;
         _howToPlayButton.style.display = DisplayStyle.None;
+        _quitButton.style.display = DisplayStyle.None;
 
         _howToPlayLabel.style.display = DisplayStyle.Flex;
         _returnButton.style.display = DisplayStyle.Flex;
@@ -63,6 +67,7 @@ public class MainMenuController : MonoBehaviour
     {
         _startButton.style.display = DisplayStyle.Flex;
         _howToPlayButton.style.display = DisplayStyle.Flex;
+        _quitButton.style.display = DisplayStyle.Flex;
 
         _howToPlayLabel.style.display = DisplayStyle.None;
         _returnButton.style.display = DisplayStyle.None;

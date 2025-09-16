@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3c6510748c9d87046962a8353406f214, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3c6510748c9d87046962a8353406f214, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3c6510748c9d87046962a8353406f214, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3c6510748c9d87046962a8353406f214, type: 3}
       propertyPath: m_LocalPosition.x
@@ -64,8 +64,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: WilbertDeWorm
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3c6510748c9d87046962a8353406f214, type: 3}
+      propertyPath: m_TagString
+      value: PickUpItem
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3c6510748c9d87046962a8353406f214, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6938175974111481109}
   m_SourcePrefab: {fileID: 100100000, guid: 3c6510748c9d87046962a8353406f214, type: 3}
+--- !u!1 &4705998658596837581 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3c6510748c9d87046962a8353406f214, type: 3}
+  m_PrefabInstance: {fileID: 5588537268570432924}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &6938175974111481109
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4705998658596837581}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1318119709532676425, guid: 3c6510748c9d87046962a8353406f214, type: 3}

@@ -19,6 +19,13 @@ public class ObstacleManager : MonoBehaviour
     public float spaceDecreaseRate = 0.01f; // Hoe snel ruimte afneemt per seconde (extreem langzaam)
     public float minSpaceMultiplier = 0.8f; // Minimum ruimte als percentage van basis (0.8 = 80% van origineel)
     
+    [Header("Powerup Settings")]
+    public GameObject powerupPrefab; // Powerup GameObject om te spawnen
+    [Range(0, 100)]
+    public float powerupSpawnChance = 30f; // Percentage kans om powerup te spawnen (0-100)
+    public int powerupPointValue = 5; // Hoeveel punten je krijgt voor een powerup
+    public Vector3 powerupRotation = Vector3.zero; // Aangepaste rotatie voor powerups (in graden)
+    
     private float gameTime = 0f; // Houd bij hoe lang het spel al bezig is
     private float currentSpaceBetweenObstacles; // Dynamische ruimte die verandert over tijd  
 
@@ -72,6 +79,9 @@ public class ObstacleManager : MonoBehaviour
             
             GameObject spawnedObstacle = Instantiate(obstacleToSpawn, spawnPos, Quaternion.identity, transform);
             activeObstacles.Add(spawnedObstacle);
+            
+            // Probeer powerup te spawnen op dit obstacle
+            TrySpawnPowerup(spawnedObstacle);
         }
     }
     
@@ -143,6 +153,9 @@ public class ObstacleManager : MonoBehaviour
         
         GameObject spawnedObstacle = Instantiate(obstacleToSpawnObj, newSpawnPosition, Quaternion.identity, transform);
         activeObstacles.Add(spawnedObstacle);
+        
+        // Probeer powerup te spawnen op dit obstacle
+        TrySpawnPowerup(spawnedObstacle);
         
         // Verwijder het oudste obstacle als we meer dan maxObstacles hebben
         if (activeObstacles.Count > maxObstacles)
@@ -224,5 +237,58 @@ public class ObstacleManager : MonoBehaviour
         gameTime = 0f;
         obstacleSpeed = baseObstacleSpeed;
         currentSpaceBetweenObstacles = spaceBetweenObstacles;
+    }
+    
+    void TrySpawnPowerup(GameObject obstacle)
+    {
+        // Check of powerup prefab is ingesteld
+        if (powerupPrefab == null) return;
+        
+        // Genereer random getal tussen 0-100
+        float randomValue = Random.Range(0f, 100f);
+        
+        // Spawn powerup als random waarde hoger is dan spawn kans
+        if (randomValue > (100f - powerupSpawnChance))
+        {
+            // Zoek naar ItemSpawnPoint in het obstacle
+            Transform itemSpawnPoint = FindItemSpawnPoint(obstacle.transform);
+            
+            if (itemSpawnPoint != null)
+            {
+                // Spawn powerup op de ItemSpawnPoint positie met aangepaste rotatie
+                Quaternion spawnRotation = Quaternion.Euler(powerupRotation);
+                GameObject spawnedPowerup = Instantiate(powerupPrefab, itemSpawnPoint.position, spawnRotation, obstacle.transform);
+                
+                // Zorg ervoor dat de powerup de "PickUpItem" tag heeft
+                if (spawnedPowerup.CompareTag("Untagged"))
+                {
+                    spawnedPowerup.tag = "PickUpItem";
+                }
+            }
+            else
+            {
+                Debug.LogWarning("ItemSpawnPoint niet gevonden in obstacle: " + obstacle.name);
+            }
+        }
+    }
+    
+    Transform FindItemSpawnPoint(Transform parent)
+    {
+        // Zoek recursief naar een child object genaamd "ItemSpawnPoint"
+        if (parent.name == "ItemSpawnPoint")
+        {
+            return parent;
+        }
+        
+        foreach (Transform child in parent)
+        {
+            Transform found = FindItemSpawnPoint(child);
+            if (found != null)
+            {
+                return found;
+            }
+        }
+        
+        return null;
     }
 }

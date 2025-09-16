@@ -134,6 +134,29 @@ public class BirdController : MonoBehaviour
                 Debug.LogWarning("BirdController score updated to: " + currentScore + " but HUDController is null!");
             }
         }
+        else if (other.gameObject.CompareTag("PickUpItem"))
+        {
+            if (obstacleManager != null && hudController != null)
+            {
+                currentScore += obstacleManager.powerupPointValue;
+                hudController.UpdateScore(currentScore);
+                
+                
+                if (audioSource != null && scoreSound != null)
+                {
+                    audioSource.pitch = Random.Range(soundFXminPitch, soundFXmaxPitch);
+                    audioSource.volume = scoreSoundVolume;
+                    audioSource.PlayOneShot(scoreSound);
+                }
+                
+                // Vernietig de powerup
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                Debug.LogWarning("ObstacleManager of HUDController is null - kan powerup punten niet toekennen!");
+            }
+        }
     }
     void OnMove(InputValue movementValue)
     {
@@ -212,14 +235,6 @@ public class BirdController : MonoBehaviour
             if (distance <= nearMissDistance)
             {
                 StartSlowMotion();
-                
-                // Play score sound for near miss
-                if (audioSource != null && scoreSound != null)
-                {
-                    audioSource.pitch = Random.Range(soundFXminPitch, soundFXmaxPitch);
-                    audioSource.volume = scoreSoundVolume;
-                    audioSource.PlayOneShot(scoreSound);
-                }
             }
         }
     }
