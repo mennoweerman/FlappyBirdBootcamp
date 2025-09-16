@@ -28,21 +28,52 @@ public class HUDController : MonoBehaviour
         // Connect restart button
         restartButton.clicked += RestartGame;
 
-        // Verberg bij start
-        gameOverLabel.style.display = DisplayStyle.None;
-        restartButton.style.display = DisplayStyle.None;
+        // Reset UI elements on initialization
+        ResetUI();
+    }
+
+    private void ResetUI()
+    {
+        // Reset score
+        score = 0;
+        if (scoreLabel != null) scoreLabel.text = $"Score: {score}";
+        
+        // Hide game over elements
+        if (gameOverLabel != null) gameOverLabel.visible = false;
+        if (restartButton != null) restartButton.visible = false;
+        
+        // Show score and high score
+        if (scoreLabel != null) scoreLabel.visible = true;
+        if (highScoreLabel != null) highScoreLabel.visible = true;
+    }
+
+    void Start()
+    {
+        // Reset UI on start
+        ResetUI();
     }
 
     public void UpdateScore(int newScore)
     {
         score = newScore;
-        scoreLabel.text = $"Score: {score}";
+        if (scoreLabel != null)
+        {
+            scoreLabel.text = $"Score: {score}";
+        }
     }
 
     public void GameOver()
     {
-        // Show Game Over
-        gameOverLabel.style.display = DisplayStyle.Flex;
+        // Show Game Over elements via visible property
+        if (gameOverLabel != null)
+        {
+            gameOverLabel.visible = true;
+        }
+        
+        if (restartButton != null)
+        {
+            restartButton.visible = true;
+        }
 
         // Check & update high score
         if (score > highScore)
@@ -53,8 +84,10 @@ public class HUDController : MonoBehaviour
         }
 
         highScoreLabel.text = $"High Score: {highScore}";
-        highScoreLabel.style.display = DisplayStyle.Flex;
-        restartButton.style.display = DisplayStyle.Flex;
+        if (highScoreLabel != null)
+        {
+            highScoreLabel.visible = true;
+        }
 
         // Pause game
         Time.timeScale = 0f;
@@ -67,5 +100,27 @@ public class HUDController : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
         );
+    }
+
+    public void StartGame()
+    {
+        score = 0;
+        
+        // Update score display
+        if (scoreLabel != null)
+        {
+            scoreLabel.text = $"Score: {score}";
+        }
+        
+        // Hide game over elements
+        if (gameOverLabel != null)
+        {
+            gameOverLabel.visible = false;
+        }
+        
+        if (restartButton != null)
+        {
+            restartButton.visible = false;
+        }
     }
 }

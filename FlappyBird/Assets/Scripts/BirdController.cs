@@ -73,6 +73,7 @@ public class BirdController : MonoBehaviour
         if (hudController != null)
         {
             hudController.UpdateScore(currentScore);
+            hudController.StartGame();
         }
 
         audioSource = GetComponent<AudioSource>();
@@ -129,7 +130,8 @@ public class BirdController : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("ObstacleManager reference is missing in BirdController!");
+                currentScore++;
+                Debug.LogWarning("BirdController score updated to: " + currentScore + " but HUDController is null!");
             }
         }
     }
@@ -284,12 +286,10 @@ public class BirdController : MonoBehaviour
     public void PauseGame()
     {
         Time.timeScale = 0f;
-        Debug.Log("Game Paused");
     }
     
     public void ResumeGame()
     {
         Time.timeScale = 1f;
-        Debug.Log("Game Resumed");
     }
 }

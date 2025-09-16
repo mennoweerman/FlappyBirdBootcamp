@@ -8,7 +8,7 @@ public class MainMenuController : MonoBehaviour
     [Header("References")]
     public GameObject player;
     public ObstacleManager obstacleManager;
-    public HUDController hudController;
+    public GameObject hudController;
     private UIDocument _uiDocument;
     private Button _startButton;
     private Button _howToPlayButton;
@@ -71,8 +71,17 @@ public class MainMenuController : MonoBehaviour
     private IEnumerator ActivatePlayerWithDelay()
     {
         yield return new WaitForSeconds(2f);
-        player.SetActive(true);
-        obstacleManager.gameObject.SetActive(true);
         hudController.gameObject.SetActive(true);
+        
+        // Wacht tot HUD volledig geactiveerd is
+        yield return new WaitForSeconds(0.1f);
+        
+        player.SetActive(true);
+        
+        // Wacht nog een frame en forceer dan de HUD reset
+        yield return null;
+        hudController.GetComponent<HUDController>().StartGame();
+        
+        obstacleManager.gameObject.SetActive(true);
     }
 }
